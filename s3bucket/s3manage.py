@@ -1,7 +1,7 @@
 import logging
 import boto3
 from botocore.exceptions import ClientError
-
+import os
 
 class manage_s3:
     """
@@ -51,14 +51,24 @@ class manage_s3:
 
         return response
 
-    def upload_object_file(self):
+    def upload_object_file(self, file_name,object_name=None):
         """
         create s3 object for a specific file.
         """
-        #path file
-        #bucket name and file upload
+        # If S3 object_name was not specified, use file_name
+        if object_name is None:
+            object_name = os.path.basename(file_name)
+            
+        # Upload the file
+        s3_client = boto3.client('s3')
+        try:
+            response = s3_client.upload_file(file_name, self.bucket_name, object_name)
+        except ClientError as e:
+            logging.error(e)
+            return False
+        return True
 
-        return 0
+
     
     def list_objects_from_bucket(self):
         return 0
@@ -70,15 +80,17 @@ class manage_s3:
         return 0
 
 if __name__=='__main__':
-    s3_obj = manage_s3("test-raj-bucket2","eu-central-1")
+    s3_obj = manage_s3("test-dummy-bucket-1","eu-central-1")
     #re = s3_obj.create_bucket()
     #print(re)
 
-    #res_json = s3_obj.list_buckets()
-    #print('Existing buckets:')
-    #for bucket in res_json['Buckets']:
-    #    print(f'  {bucket["Name"]}')
+    res_json = s3_obj.list_buckets()
+    print('Existing buckets:')
+    for bucket in res_json['Buckets']:
+        print(f'  {bucket["Name"]}')
     #s3_obj.delete_bucket()
+
+    s3_obj.upload_object_file("/home/raj/Music/aws/amazonboto3/s3bucket/3.json")
 
 
     
