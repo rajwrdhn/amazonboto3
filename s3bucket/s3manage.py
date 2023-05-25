@@ -58,25 +58,33 @@ class manage_s3:
         # If S3 object_name was not specified, use file_name
         if object_name is None:
             object_name = os.path.basename(file_name)
-            
+
         # Upload the file
         s3_client = boto3.client('s3')
         try:
             response = s3_client.upload_file(file_name, self.bucket_name, object_name)
+        
         except ClientError as e:
             logging.error(e)
             return False
         return True
-
-
     
     def list_objects_from_bucket(self):
-        return 0
+        s3_client = boto3.client('s3')
+        try:
+            response = s3_client.list_objects_v2(Bucket=self.bucket_name)
+        
+        except ClientError as e:
+            logging.error(e)          
+        return response
     
     def read_s3_object(self):
         return 0
     
     def retrieving_objects_specific_type(self):
+        return 0
+    
+    def copy_from_bucket_to_bucket(self):
         return 0
 
 if __name__=='__main__':
@@ -90,7 +98,9 @@ if __name__=='__main__':
         print(f'  {bucket["Name"]}')
     #s3_obj.delete_bucket()
 
-    s3_obj.upload_object_file("/home/raj/Music/aws/amazonboto3/s3bucket/3.json")
+    #s3_obj.upload_object_file("/home/raj/Music/aws/amazonboto3/s3bucket/3.json")
 
-
+    res = s3_obj.list_objects_from_bucket()
+    for ke in res['Contents']:       
+        print(f' {ke["Key"]}')
     
