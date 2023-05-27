@@ -78,14 +78,21 @@ class manage_s3:
             logging.error(e)          
         return response
     
-    def read_s3_object(self):
+    def retrieving_objects_specific_type(self, file_type):
+        res_out = {}
+        res = self.list_objects_from_bucket()
+        
         return 0
     
-    def retrieving_objects_specific_type(self):
-        return 0
-    
-    def copy_from_bucket_to_bucket(self):
-        return 0
+    def copy_from_bucket_to_bucket(self, bucket_from, key_from, bucket_to, key_to):
+        s3_resource = boto3.resource('s3')
+        copy_source = {
+            'Bucket': bucket_from,
+            'Key': key_from
+            }
+        bucket = s3_resource.Bucket(bucket_to)
+        bucket.copy(copy_source, key_to)
+        
 
 if __name__=='__main__':
     s3_obj = manage_s3("test-dummy-bucket-1","eu-central-1")
@@ -103,4 +110,5 @@ if __name__=='__main__':
     res = s3_obj.list_objects_from_bucket()
     for ke in res['Contents']:       
         print(f' {ke["Key"]}')
+    
     
