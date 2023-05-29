@@ -1,5 +1,6 @@
+import logging
 import boto3
-
+from botocore.exceptions import ClientError
 
 class AccessPolicy():
 
@@ -29,7 +30,14 @@ class AccessPolicy():
         )
         
         return response
+    
+    def list_ap(self):
+        """
+        """
+        s3client = boto3.client('s3control')
+        response = s3client.list_access_points(AccountId=self.account) 
 
+        return response
 
 if __name__=='__main__':
     ap_obj = AccessPolicy("444001393398")
@@ -37,3 +45,7 @@ if __name__=='__main__':
     r = ap_obj.get_ap("ap1")
 
     print(r['Endpoints']['ipv4'])
+
+    a = ap_obj.list_ap()
+    for nam in a['AccessPointList']:
+        print(nam['Name'])

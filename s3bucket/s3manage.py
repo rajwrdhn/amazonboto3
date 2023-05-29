@@ -90,8 +90,8 @@ class manage_s3:
             'Bucket': bucket_from,
             'Key': key_from
             }
-        bucket = s3_resource.Bucket(bucket_to)
-        bucket.copy(copy_source, key_to)
+        #bucket = s3_resource.Bucket(bucket_to)
+        bucket_to.copy(copy_source, key_to)
         
 
 if __name__=='__main__':
