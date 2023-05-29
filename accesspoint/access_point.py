@@ -40,7 +40,7 @@ class AccessPolicy():
         return response
 
 if __name__=='__main__':
-    ap_obj = AccessPolicy("444001393398")
+    ap_obj = AccessPolicy("account number aws")
     #ap_obj.create_ap("test-dummy-bucket-1")
     r = ap_obj.get_ap("ap1")
 
